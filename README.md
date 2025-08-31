@@ -45,8 +45,8 @@ POST http://localhost:5000/api/categories
 ```
 Example Product
 http
-```json
 POST http://localhost:5000/api/products
+```json
 {
   "name": "Wireless Mouse",
   "sku": "ELEC001",
