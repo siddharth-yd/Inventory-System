@@ -1,5 +1,6 @@
 import React from 'react';
 import API from '../api';
+import { Table, Button } from 'react-bootstrap';
 
 function ShoppingCart({ cart, setCart, userId }) {
 
@@ -43,25 +44,38 @@ function ShoppingCart({ cart, setCart, userId }) {
   const total = cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
 
   return (
-    <div style={{ marginBottom: "2rem" }}>
+    <div>
       <h2>Shopping Cart</h2>
-      {cart.length === 0 ? (
-        <p>Cart is empty</p>
-      ) : (
+      {cart.length === 0 ? <p>Cart is empty</p> : (
         <>
-          <ul>
-            {cart.map(item => (
-              <li key={item.product._id}>
-                {item.product.name} - ${item.product.price.toFixed(2)} x {item.quantity}
-                {" "}
-                <button onClick={() => increaseQty(item.product)}>+</button>
-                <button onClick={() => decreaseQty(item.product)}>-</button>
-                <button onClick={() => removeFromCart(item.product._id)}>Remove</button>
-              </li>
-            ))}
-          </ul>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Subtotal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {cart.map(item => (
+                <tr key={item.product._id}>
+                  <td>{item.product.name}</td>
+                  <td>${item.product.price.toFixed(2)}</td>
+                  <td>
+                    <Button size="sm" variant="light" onClick={() => decreaseQty(item.product)}>-</Button>
+                    <span className="mx-2">{item.quantity}</span>
+                    <Button size="sm" variant="light" onClick={() => increaseQty(item.product)}>+</Button>
+                  </td>
+                  <td>${(item.product.price * item.quantity).toFixed(2)}</td>
+                  <td><Button size="sm" variant="danger" onClick={() => removeFromCart(item.product._id)}>Remove</Button></td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
           <h3>Total: ${total.toFixed(2)}</h3>
-          <button onClick={checkout}>Checkout</button>
+          <Button variant="success" onClick={checkout}>Checkout</Button>
         </>
       )}
     </div>

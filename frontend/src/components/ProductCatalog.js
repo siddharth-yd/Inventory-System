@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import API from '../api';
+import { Card, Button, Row, Col, Form } from 'react-bootstrap';
 
 function ProductCatalog({ addToCart }) {
   const [products, setProducts] = useState([]);
@@ -25,35 +26,33 @@ function ProductCatalog({ addToCart }) {
   );
 
   return (
-    <div style={{ marginBottom: "2rem" }}>
+    <div>
       <h2>Product Catalog</h2>
-      
-      <input
-        type="text"
-        placeholder="Search products..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        style={{ marginRight: "1rem" }}
-      />
-
-      <label>
-        <input
+      <Form className="d-flex mb-3">
+        <Form.Control type="text" placeholder="Search" value={search} onChange={e => setSearch(e.target.value)} />
+        <Form.Check
           type="checkbox"
+          label="Low Stock Only"
+          className="ms-3"
           checked={lowStockOnly}
           onChange={() => setLowStockOnly(!lowStockOnly)}
         />
-        Show Low Stock Only
-      </label>
+      </Form>
 
-      <ul>
+      <Row>
         {filteredProducts.map(p => (
-          <li key={p._id} style={{ margin: "0.5rem 0" }}>
-            {p.name} - Stock: {p.stock_quantity} - ${p.price.toFixed(2)}
-            {" "}
-            <button onClick={() => addToCart(p)}>Add to Cart</button>
-          </li>
+          <Col sm={12} md={4} lg={3} className="mb-3" key={p._id}>
+            <Card>
+              <Card.Body>
+                <Card.Title>{p.name}</Card.Title>
+                <Card.Subtitle className="mb-2 text-muted">Stock: {p.stock_quantity}</Card.Subtitle>
+                <Card.Text>${p.price.toFixed(2)}</Card.Text>
+                <Button variant="primary" onClick={() => addToCart(p)}>Add to Cart</Button>
+              </Card.Body>
+            </Card>
+          </Col>
         ))}
-      </ul>
+      </Row>
     </div>
   );
 }
